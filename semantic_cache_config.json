@@ -1,0 +1,11 @@
+{
+  "model_name": "all-MiniLM-L6-v2",
+  "cache_dir": "./cache",
+  "similarity_threshold": 0.8,
+  "max_cache_size": 1000,
+  "auto_save": true,
+  "save_interval": 10,
+  "embedding_dimension": 384,
+  "enable_logging": true,
+  "log_level": "INFO"
+}
