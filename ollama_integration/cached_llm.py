@@ -103,10 +103,10 @@ class CachedLLM:
         
         # Cache miss - query LLM
         self.stats['cache_misses'] += 1
-        logger.info("Cache miss - querying LLM")
+        # logger.info("Cache miss - querying LLM")
         
-        if not self.is_llm_available():
-            raise Exception("LLM is not available. Make sure Ollama is running.")
+        # if not self.is_llm_available():
+        #     raise Exception("LLM is not available. Make sure Ollama is running.")
         
         llm_start_time = time.time()
         try:
@@ -134,7 +134,6 @@ class CachedLLM:
                     }
                 )
             
-            logger.info(f"LLM response generated in {llm_time:.2f} seconds")
             return response
             
         except Exception as e:

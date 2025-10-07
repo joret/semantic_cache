@@ -105,7 +105,6 @@ class SemanticCache:
             return self.prompt_hashes[max_index], max_similarity
         
         return None, max_similarity
-    
     def get(self, prompt: str) -> Optional[str]:
         """
         Retrieve a cached response for a semantically similar prompt.

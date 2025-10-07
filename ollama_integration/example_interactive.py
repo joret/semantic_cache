@@ -99,27 +99,25 @@ def main():
     total_prompts = len(prompts)
     
     for i, prompt in enumerate(prompts, 1):
-        # Wait for user input before each prompt (except the first one)
-        if i > 1:
-            wait_for_input(i, total_prompts)
         
-        # Determine expected cache behavior
-        if i <= 10:  # AI/ML group
-            expected = "HIT"
+        
+        # Determine related queries
+        if i <= 10:  # AI/ML group, expecting some cache hits
             group = "AI/ML"
-        elif i <= 16:  # Python group
-            expected = "HIT"
+        elif i <= 16:  # Python group, expecting some cache hits
             group = "Python"
-        else:  # Different topics
-            expected = "MISS"
+        else:  # Different topics, expected all cache miss
             group = "Other"
         
-        print(f"\n{'='*60}")
-        print(f"PROMPT {i}/{total_prompts} - {group} Group")
+        print(f"\n\n\n{'='*60}")
+        print(f"\033[1mPROMPT {i}/{total_prompts} - {group} Group\033[0m")
         print(f"{'='*60}")
         print(f"Query: {prompt}")
-        print(f"Expected: {expected}")
+        print(f"Topic: {group}")
         print(f"{'='*60}")
+
+        # Wait for user input before each prompt execution (except the first one)
+        wait_for_input(i, total_prompts)
         
         start_time = time.time()
         try:

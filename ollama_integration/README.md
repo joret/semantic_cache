@@ -27,6 +27,11 @@ pip install -r requirements.txt
 # (it should be in the parent directory)
 ```
 
+## TODO
+- Upgrade Python 
+- Remove call to tags when cache hit
+
+
 ## Quick Start
 
 ### Basic Usage
