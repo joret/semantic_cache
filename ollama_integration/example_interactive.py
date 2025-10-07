@@ -1,37 +1,29 @@
 #!/usr/bin/env python3
 """
-Simple example of using Cached LLM
+Interactive example of using Cached LLM with step-by-step execution
 """
 
 import sys
 import os
 import time
-import keyboard
 
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from cached_llm import CachedLLM
 
-def wait_for_spacebar(prompt_num, total_prompts):
-    """Wait for user to press spacebar to continue."""
-    print(f"\n⏸️  Press SPACEBAR to continue to prompt {prompt_num}/{total_prompts} (or 'q' to quit)")
-    while True:
-        try:
-            key = keyboard.read_key()
-            if key == 'space':
-                print("▶️  Continuing...")
-                break
-            elif key == 'q':
-                print("👋 Quitting...")
-                sys.exit(0)
-        except KeyboardInterrupt:
-            print("\n👋 Quitting...")
-            sys.exit(0)
+def wait_for_input(prompt_num, total_prompts):
+    """Wait for user to press Enter to continue."""
+    print(f"\n⏸️  Press ENTER to continue to prompt {prompt_num}/{total_prompts} (or 'q' + ENTER to quit)")
+    user_input = input().strip().lower()
+    if user_input == 'q':
+        print("👋 Quitting...")
+        sys.exit(0)
+    print("▶️  Continuing...")
 
 def main():
     """Run a simple example."""
-    print("🚀 Cached LLM Example")
+    print("🚀 Cached LLM Interactive Example")
     print("=" * 40)
     
     # Initialize cached LLM
@@ -46,7 +38,7 @@ def main():
         print("❌ Ollama is not available!")
         print("Please make sure Ollama is running:")
         print("  ollama serve")
-        print("  ollama pull llama2")
+        print("  ollama pull llama3:latest")
         return
     
     print("✅ Ollama is available")
@@ -92,21 +84,16 @@ def main():
         "What is the capital of France?",
         "How do I cook pasta?",
         "What is quantum physics?",
-        "Tell me about the weather",
-        "What is the meaning of life?",
-        "How do I change a tire?",
-        "What is photosynthesis?",
-        "Tell me about dinosaurs",
-        "How do I play guitar?",
-        "What is the stock market?"
+        "Tell me about the weather"
     ]
     
     print("\nTesting semantic caching with similar prompts...")
     print("-" * 50)
     print("📋 Instructions:")
-    print("   - Press SPACEBAR to continue to the next prompt")
-    print("   - Press 'q' to quit at any time")
+    print("   - Press ENTER to continue to the next prompt")
+    print("   - Type 'q' + ENTER to quit at any time")
     print("   - Watch for cache hits vs misses!")
+    print("   - Notice how similar prompts get cached responses!")
     print("-" * 50)
     
     total_prompts = len(prompts)
@@ -114,18 +101,21 @@ def main():
     for i, prompt in enumerate(prompts, 1):
         # Wait for user input before each prompt (except the first one)
         if i > 1:
-            wait_for_spacebar(i, total_prompts)
+            wait_for_input(i, total_prompts)
         
         # Determine expected cache behavior
         if i <= 10:  # AI/ML group
             expected = "HIT"
+            group = "AI/ML"
         elif i <= 16:  # Python group
             expected = "HIT"
+            group = "Python"
         else:  # Different topics
             expected = "MISS"
+            group = "Other"
         
         print(f"\n{'='*60}")
-        print(f"PROMPT {i}/{total_prompts}")
+        print(f"PROMPT {i}/{total_prompts} - {group} Group")
         print(f"{'='*60}")
         print(f"Query: {prompt}")
         print(f"Expected: {expected}")
@@ -137,14 +127,17 @@ def main():
             query_time = time.time() - start_time
             
             print(f"⏱️  Time: {query_time:.2f}s")
-            print(f"📝 Response: {response[:100]}...")
+            print(f"📝 Response: {response[:200]}...")
             
             # Show current stats after each query
             current_stats = cached_llm.get_stats()
-            print(f"📊 Current Hit Rate: {current_stats['hit_rate']:.1%}")
-            print(f"📊 Total Queries: {current_stats['total_queries']}")
-            print(f"📊 Cache Hits: {current_stats['cache_hits']}")
-            print(f"📊 LLM Calls: {current_stats['llm_calls']}")
+            print(f"\n📊 Current Statistics:")
+            print(f"   Hit Rate: {current_stats['hit_rate']:.1%}")
+            print(f"   Total Queries: {current_stats['total_queries']}")
+            print(f"   Cache Hits: {current_stats['cache_hits']}")
+            print(f"   LLM Calls: {current_stats['llm_calls']}")
+            print(f"   Avg LLM Time: {current_stats['avg_llm_time']:.2f}s")
+            print(f"   Avg Cache Time: {current_stats['avg_cache_time']:.3f}s")
             
         except Exception as e:
             print(f"❌ Error: {e}")
@@ -152,17 +145,20 @@ def main():
         print(f"{'='*60}")
     
     # Show final statistics
-    print("\n" + "=" * 50)
-    print("Final Statistics:")
+    print("\n" + "=" * 60)
+    print("🎉 FINAL RESULTS")
+    print("=" * 60)
     stats = cached_llm.get_stats()
     
     print(f"Total Queries: {stats['total_queries']}")
     print(f"Cache Hits: {stats['cache_hits']}")
     print(f"Cache Misses: {stats['cache_misses']}")
-    print(f"Hit Rate: {stats['hit_rate']:.1%}")
     print(f"LLM Calls: {stats['llm_calls']}")
+    print(f"Hit Rate: {stats['hit_rate']:.1%}")
     print(f"Avg LLM Time: {stats['avg_llm_time']:.2f}s")
     print(f"Avg Cache Time: {stats['avg_cache_time']:.3f}s")
+    print(f"Total LLM Time: {stats['total_llm_time']:.2f}s")
+    print(f"Total Cache Time: {stats['total_cache_time']:.3f}s")
     
     # Show cache contents
     print(f"\nCache Contents ({stats['cache_stats']['total_entries']} entries):")
@@ -183,6 +179,12 @@ def main():
     else:
         print("   ⚠️  Lower than expected cache performance")
         print("   💡 Try lowering similarity_threshold for more hits")
+    
+    print(f"\n💡 Key Observations:")
+    print(f"   - Similar prompts (AI/ML, Python) should hit the cache")
+    print(f"   - Different topics should miss the cache")
+    print(f"   - Cache responses are much faster than LLM calls")
+    print(f"   - Semantic similarity finds related prompts automatically")
 
 if __name__ == "__main__":
     main()
