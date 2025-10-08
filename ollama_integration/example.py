@@ -136,20 +136,11 @@ def main():
             response = cached_llm.query(prompt)
             query_time = time.time() - start_time
             
-            print(f"⏱️  Time: {query_time:.2f}s")
-            print(f"📝 Response: {response[:100]}...")
-            
-            # Show current stats after each query
-            current_stats = cached_llm.get_stats()
-            print(f"📊 Current Hit Rate: {current_stats['hit_rate']:.1%}")
-            print(f"📊 Total Queries: {current_stats['total_queries']}")
-            print(f"📊 Cache Hits: {current_stats['cache_hits']}")
-            print(f"📊 LLM Calls: {current_stats['llm_calls']}")
+            print(f"   Time: {query_time:.2f}s")
+            print(f"   Response: {response[:100]}...")
             
         except Exception as e:
-            print(f"❌ Error: {e}")
-        
-        print(f"{'='*60}")
+            print(f"   Error: {e}")
     
     # Show final statistics
     print("\n" + "=" * 50)
@@ -169,20 +160,6 @@ def main():
     search_results = cached_llm.search_cache("artificial intelligence", top_k=3)
     for i, (prompt, response, similarity) in enumerate(search_results, 1):
         print(f"  {i}. {similarity:.3f} - {prompt}")
-    
-    # Analysis
-    print(f"\n📊 Cache Analysis:")
-    print(f"   Expected hits:  (AI/ML + Python groups)")
-    print(f"   Expected misses: (different topics)")
-    print(f"   Actual hit rate: {stats['hit_rate']:.1%}")
-    
-    if stats['hit_rate'] > 0.7:
-        print("   ✅ Excellent cache performance!")
-    elif stats['hit_rate'] > 0.4:
-        print("   ✅ Good cache performance!")
-    else:
-        print("   ⚠️  Lower than expected cache performance")
-        print("   💡 Try lowering similarity_threshold for more hits")
 
 if __name__ == "__main__":
     main()
