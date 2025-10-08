@@ -1,0 +1,13 @@
+# Requirements for Ollama Web Integration
+# These are in addition to the main semantic_cache requirements
+
+flask>=2.0.0
+flask-socketio>=5.0.0
+requests>=2.25.0
+numpy>=1.21.0,<2.0.0
+sentence-transformers>=2.2.0,<2.7.0
+torch>=1.9.0,<2.0.0
+transformers>=4.20.0,<4.35.0
+scikit-learn>=1.0.0
+python-socketio>=5.0.0
+eventlet>=0.33.0
