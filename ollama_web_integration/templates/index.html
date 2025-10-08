@@ -251,6 +251,42 @@
             color: #666;
         }
 
+        .response-preview {
+            position: relative;
+        }
+
+        .response-text {
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .expand-btn {
+            width: 100%;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .expand-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .expand-btn i {
+            transition: transform 0.3s ease;
+        }
+
         .loading-spinner {
             width: 20px;
             height: 20px;

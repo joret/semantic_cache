@@ -271,7 +271,31 @@ class SemanticCacheApp {
     showResponse(response, wasCached = null) {
         const queryTime = this.queryStartTime ? ((Date.now() - this.queryStartTime) / 1000).toFixed(2) : null;
         
-        let responseHTML = this.escapeHtml(response);
+        // Split response into lines
+        const lines = response.split('\n');
+        const shouldCollapse = lines.length > 5;
+        
+        let responseHTML = '';
+        
+        if (shouldCollapse) {
+            // Show first 5 lines with expand button
+            const previewLines = lines.slice(0, 5).join('\n');
+            const fullResponse = response;
+            
+            responseHTML = `
+                <div class="response-preview">
+                    <div class="response-text" id="response-preview-text">${this.escapeHtml(previewLines)}</div>
+                    <div class="response-text hidden" id="response-full-text">${this.escapeHtml(fullResponse)}</div>
+                    <button class="expand-btn" id="expand-btn" onclick="window.semanticCacheApp.toggleResponseExpansion()">
+                        <i class="fas fa-chevron-down"></i>
+                        Show More (${lines.length - 5} more lines)
+                    </button>
+                </div>
+            `;
+        } else {
+            // Show full response if 5 lines or less
+            responseHTML = `<div class="response-text">${this.escapeHtml(response)}</div>`;
+        }
         
         // Add response time indicator if available
         if (queryTime !== null) {
@@ -293,6 +317,28 @@ class SemanticCacheApp {
         
         // Refresh stats after getting a response
         this.loadStats();
+    }
+    
+    toggleResponseExpansion() {
+        const previewText = document.getElementById('response-preview-text');
+        const fullText = document.getElementById('response-full-text');
+        const expandBtn = document.getElementById('expand-btn');
+        
+        if (!previewText || !fullText || !expandBtn) return;
+        
+        const isExpanded = !fullText.classList.contains('hidden');
+        
+        if (isExpanded) {
+            // Collapse
+            previewText.classList.remove('hidden');
+            fullText.classList.add('hidden');
+            expandBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Show More';
+        } else {
+            // Expand
+            previewText.classList.add('hidden');
+            fullText.classList.remove('hidden');
+            expandBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Show Less';
+        }
     }
     
     showError(error) {
