@@ -30,6 +30,11 @@ pip install -r requirements.txt
 ## TODO
 - Upgrade Python 
 - Remove call to tags when cache hit
+- test other approaches 1. Vectorized Operations (Current + Optimized), 2. Approximate Nearest Neighbors (FAISS), 3. Locality Sensitive Hashing (LSH):
+- prepare some theory about vectors and cosine similarity between two embeddings.
+- Point out similarities of techniques between rag and semantic cache
+
+
 
 
 ## Quick Start

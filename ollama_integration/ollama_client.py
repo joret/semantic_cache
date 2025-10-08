@@ -79,7 +79,6 @@ class OllamaClient:
             if options:
                 payload["options"] = options
             
-            logger.info(f"Generating response with model: {model}")
             start_time = time.time()
             
             response = self.session.post(
@@ -93,7 +92,7 @@ class OllamaClient:
             generated_text = data.get("response", "")
             
             end_time = time.time()
-            logger.info(f"Generated response in {end_time - start_time:.2f} seconds")
+            logger.info(f"Generated response with model: {model} in {end_time - start_time:.2f} seconds")
             
             return generated_text.strip()
             

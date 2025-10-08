@@ -227,7 +227,6 @@ class CachedLLM:
         
         return {
             'llm_model': self.model_name,
-            'llm_available': self.is_llm_available(),
             'total_queries': self.stats['total_queries'],
             'cache_hits': self.stats['cache_hits'],
             'cache_misses': self.stats['cache_misses'],

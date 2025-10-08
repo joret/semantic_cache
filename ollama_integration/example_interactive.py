@@ -169,10 +169,11 @@ def main():
     print(f"   Expected hits: 16 (AI/ML + Python groups)")
     print(f"   Expected misses: 4 (different topics)")
     print(f"   Actual hit rate: {stats['hit_rate']:.1%}")
-    
-    if stats['hit_rate'] > 0.7:
+    hit_rate = stats['hit_rate']
+
+    if hit_rate > 0.7:
         print("   ✅ Excellent cache performance!")
-    elif stats['hit_rate'] > 0.5:
+    elif hit_rate >= 0.4:
         print("   ✅ Good cache performance!")
     else:
         print("   ⚠️  Lower than expected cache performance")
