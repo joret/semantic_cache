@@ -122,3 +122,4 @@ echo "  - Live statistics and cache management"
 echo "  - Mobile-friendly design"
 echo ""
 echo "For more information, see README.md"
+

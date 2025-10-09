@@ -201,6 +201,18 @@
             box-shadow: 0 5px 15px rgba(79, 172, 254, 0.1);
         }
 
+        .suggestion-cache-hit {
+            border: 2px solid #dc3545;
+            background: #fff5f5;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        }
+
+        .suggestion-cache-hit:hover {
+            background: #ffe5e5;
+            border-color: #c82333;
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.2);
+        }
+
         .suggestion-header {
             display: flex;
             justify-content: space-between;
@@ -221,6 +233,38 @@
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: 600;
+        }
+
+        .badge-cache-hit {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .cache-hit-indicator {
+            margin-top: 12px;
+            padding: 8px 12px;
+            background: #dc3545;
+            color: white;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .cache-hit-indicator i {
+            font-size: 1rem;
+        }
+
+        .cache-hit-threshold {
+            background: #ff6b6b;
+            opacity: 0.9;
         }
 
         .suggestion-response {

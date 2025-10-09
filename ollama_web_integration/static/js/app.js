@@ -175,8 +175,12 @@ class SemanticCacheApp {
     showSuggestions(suggestions) {
         this.elements.suggestionsList.innerHTML = '';
         
+        // Find the highest similarity for determining which gets "will be returned from cache"
+        const maxSimilarity = Math.max(...suggestions.map(s => s.similarity));
+        
         suggestions.forEach((suggestion, index) => {
-            const suggestionElement = this.createSuggestionElement(suggestion, index);
+            const isTopMatch = suggestion.similarity === maxSimilarity;
+            const suggestionElement = this.createSuggestionElement(suggestion, index, isTopMatch);
             this.elements.suggestionsList.appendChild(suggestionElement);
         });
         
@@ -184,15 +188,35 @@ class SemanticCacheApp {
         this.elements.suggestionsContainer.classList.add('fade-in');
     }
     
-    createSuggestionElement(suggestion, index) {
+    createSuggestionElement(suggestion, index, isTopMatch) {
         const div = document.createElement('div');
-        div.className = 'suggestion';
+        
+        // Check if similarity is above threshold (0.85 default)
+        const similarityThreshold = 0.85;
+        const isCacheHit = suggestion.similarity >= similarityThreshold;
+        
+        div.className = isCacheHit ? 'suggestion suggestion-cache-hit' : 'suggestion';
+        
+        // Determine the indicator message
+        let indicatorHTML = '';
+        if (isCacheHit) {
+            if (isTopMatch) {
+                indicatorHTML = '<div class="cache-hit-indicator"><i class="fas fa-check-circle"></i> Highest similarity. Will be returned from cache</div>';
+            } else {
+                indicatorHTML = '<div class="cache-hit-indicator cache-hit-threshold"><i class="fas fa-check"></i> Crossed similarity threshold</div>';
+            }
+        }
+        
         div.innerHTML = `
             <div class="suggestion-header">
-                <div class="suggestion-prompt">${this.escapeHtml(suggestion.prompt)}</div>
-                <div class="similarity-badge">${(suggestion.similarity * 100).toFixed(1)}% match</div>
+                <div class="suggestion-prompt">
+                    ${isCacheHit ? '<i class="fas fa-bolt" style="color: #dc3545; margin-right: 5px;"></i>' : ''}
+                    ${this.escapeHtml(suggestion.prompt)}
+                </div>
+                <div class="similarity-badge ${isCacheHit ? 'badge-cache-hit' : ''}">${(suggestion.similarity * 100).toFixed(1)}% match</div>
             </div>
             <div class="suggestion-response">${this.escapeHtml(suggestion.response)}</div>
+            ${indicatorHTML}
         `;
         
         div.addEventListener('click', () => {
