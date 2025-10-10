@@ -331,6 +331,50 @@
             transition: transform 0.3s ease;
         }
 
+        .embedding-section {
+            margin-top: 20px;
+        }
+
+        #embedding-header {
+            user-select: none;
+            padding: 5px 0;
+        }
+
+        #embedding-header:hover {
+            opacity: 0.8;
+        }
+
+        .embedding-content {
+            transition: all 0.3s ease;
+        }
+
+        .embedding-container {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .embedding-stats {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .embedding-array {
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            overflow-x: auto;
+            word-wrap: break-word;
+        }
+
         .loading-spinner {
             width: 20px;
             height: 20px;
@@ -493,6 +537,28 @@
                 </div>
             </div>
 
+            <div class="embedding-section hidden" id="embedding-section">
+                <div class="input-label" style="cursor: pointer;" id="embedding-header">
+                    <i class="fas fa-chevron-right" id="embedding-chevron" style="transition: transform 0.3s;"></i>
+                    <i class="fas fa-code"></i> Query Embedding Visualization
+                    <button class="btn-secondary" id="toggle-embedding-btn" style="margin-left: 10px; padding: 8px 16px; font-size: 0.85rem;" onclick="event.stopPropagation();">
+                        <i class="fas fa-eye"></i> Show Details
+                    </button>
+                    <span style="margin-left: 15px; font-size: 0.9rem; font-weight: normal;" onclick="event.stopPropagation();">
+                        <label for="plot-k-value" style="margin-right: 5px;">Show closest:</label>
+                        <input type="number" id="plot-k-value" min="2" max="10" value="4" 
+                               style="width: 60px; padding: 6px; border: 1px solid #e9ecef; border-radius: 6px; font-size: 0.85rem;">
+                        embeddings
+                    </span>
+                </div>
+                <div class="embedding-content hidden" id="embedding-content">
+                    <div id="embedding-plot-container-live" style="margin-top: 15px;"></div>
+                    <div class="embedding-container hidden" id="embedding-container">
+                        <!-- Embedding details will be populated here -->
+                    </div>
+                </div>
+            </div>
+
             <div class="suggestions-container hidden" id="suggestions-container">
                 <div class="suggestions-header">
                     <i class="fas fa-lightbulb"></i>
@@ -514,6 +580,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>
